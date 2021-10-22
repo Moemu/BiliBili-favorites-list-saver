@@ -29,13 +29,16 @@ clone此仓库
 
 ### 使用封装后的exe文件运行
 
+从[Releases](https://github.com/WhitemuTeam/BiliBili-favorites-list-saver/releases)下载最新的`BiliBili-favorites-list-saver.exe`，但部分电脑可能存在报错情况，这是由于Pyinstaller的封包问题引起的错误，因此我们推荐使用Windows10 x64以上的系统来使用此exe
+
 ## 使用
 
 打开此程序，我们会看到程序生成了一个名为“主界面”的GUI窗口并生成了一个名为"data"的文件夹（data文件夹非常重要，里面会有你的收藏夹数据）
 
 一开始里面是没有能查看的收藏夹的，我们需要添加一个
 
-点击添加按钮，跳转到"添加页"，输入你的收藏夹链接（类似于https://space.bilibili.com/1655970980/favlist?fid=1380825080&ftype=create，在Web端的个人空间处可以看到这个链接，**收藏夹必须公开，不然程序无法获取到你的收藏夹列表**）后点击提交
+点击添加按钮，跳转到"添加页"，输入你的收藏夹链接（类似于https://space.bilibili.com/1655970980/favlist?fid=1380825080&ftype=create
+在Web端的个人空间处可以看到这个链接，**收藏夹必须公开，不然程序无法获取到你的收藏夹列表**）后点击提交
 
 此时程序会在data文件夹生成一个以收藏夹ID+收藏夹名命名的txt文件，它的结构类似于：
 
