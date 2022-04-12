@@ -8,8 +8,6 @@ B站收藏夹列表saver是一个基于Python开发，拥有GUI的一款工具�
 
 # 使用
 
-clone此仓库
-
 ## 运行
 
 ### 使用源码运行
@@ -20,7 +18,7 @@ clone此仓库
 
 ```powershell
 pip install requests
-pip install  PySimpleGUI
+pip install PySimpleGUI
 ```
 
 clone此仓库
@@ -31,6 +29,10 @@ clone此仓库
 
 从[Releases](https://github.com/WhitemuTeam/BiliBili-favorites-list-saver/releases)下载最新的`BiliBili-favorites-list-saver.exe`，但部分电脑可能存在报错情况，这是由于Pyinstaller的封包问题引起的错误，因此我们推荐使用Windows10 x64以上的系统来使用此exe
 
+### 自动运行
+
+我们提供了一个AutoUpdate程序，该程序会自动更新收藏夹列表，请将其添加进启动项中即可
+
 ## 使用
 
 打开此程序，我们会看到程序生成了一个名为“主界面”的GUI窗口并生成了一个名为"data"的文件夹（data文件夹非常重要，里面会有你的收藏夹数据）
@@ -38,7 +40,7 @@ clone此仓库
 一开始里面是没有能查看的收藏夹的，我们需要添加一个
 
 点击添加按钮，跳转到"添加页"，输入你的收藏夹链接（类似于https://space.bilibili.com/1655970980/favlist?fid=1380825080&ftype=create
-在Web端的个人空间处可以看到这个链接，**收藏夹必须公开，不然程序无法获取到你的收藏夹列表**）后点击提交
+在Web端的个人空间处可以看到这个链接，**收藏夹必须公开，除非你[定义Cookie](#定义Cookie)，不然程序无法获取到你的收藏夹列表**）后点击提交
 
 此时程序会在data文件夹生成一个以收藏夹ID+收藏夹名命名的txt文件，它的结构类似于：
 
@@ -59,11 +61,21 @@ clone此仓库
 
 同样的，我们还可以点击打开txt文件来查看全部数据
 
+## 定义Cookie
+
+若您需要获取您的私密收藏夹，则您需要获取登录Cookie
+
+你需要使用浏览器登录到Bilibili并进入https://api.bilibili.com/x/v3/fav/resource/list
+
+在此页面按下F12进入开发人员工具，切换到Network(网络)选项卡，此时刷新网页，过后你会看到一个list行，点击list行，在新弹出页面中找到headers(请求标头)，在其下方找到cookie一行，复制cookie以后的内容（该内容不加深）
+
+返回到软件主页面点击高级按钮，粘贴复制的内容，点击提交即可
+
 # 关于
 
-作者：White_mu(WhitemuTeam)
+作者：Moemu
 
-Email: master@muspace.top
+Email: [master@muspace.top](mailto://master@muspace.top)
 
 Blog: https://muspace.top/
 
