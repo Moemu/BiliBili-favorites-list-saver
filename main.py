@@ -255,5 +255,4 @@ def GUI() -> None:
             break
 
 if __name__=='__main__':
-    os.chdir('E:\mu\py\自己使用')
     GUI()
