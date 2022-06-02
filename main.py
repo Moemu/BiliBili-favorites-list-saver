@@ -7,6 +7,7 @@ import PySimpleGUI as sg
 import json,os,time
 
 sg.theme('Reddit')
+os.chdir(r'E:\py\自己使用')
 
 header={'User-Agent':'Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36'}
 
@@ -63,57 +64,55 @@ def writedata(faid,vdeiotit,vdeioid,vdeioauthor,vdeiostatus,fname):
         author=vdeioauthor[i]
         sen=sen+'标题:'+tit+' 作者:'+author+' BV:'+bvid+' 状态:'+status+'\n'
     with open("data\\"+name,'w',encoding='utf-8') as f:
-        print(sen,file=f)
+        f.write(sen)
 
 def readdatalist():
     if not os.path.isdir('data'):
         os.mkdir('data')
     txtlist=os.listdir('data')
     if txtlist==[]:
-        txtlist=['这里还什么都没有啊~']
+        txtlist=['这里还什么都没有呢~']
     if 'cookie.json' in txtlist:
         txtlist.remove('cookie.json')
     return txtlist
 
 def dataview(txt):
-    try:
+    if not os.path.isfile("data\\"+txt):
+        sg.popup('数据库为空,请添加一个收藏夹吧~')
+        return None
+    else:
         with open("data\\"+txt,'r',encoding='utf-8') as f:
-            data=f.readlines()
-    except:
-        sg.popup('数据库为空，请添加一个收藏夹吧~')
-    sen=[[sg.Text('本次展示的是一部分数据，若要查看全部数据，请打开txt文件',font=('微软雅黑 10'))]]
+            data = f.readlines()
+    sen=[[sg.Text('本次展示的是一部分数据,若要查看全部数据,请打开txt文件',font=('微软雅黑 10'))]]
     author=[]
-    for a in range(20): #此处更改一次性显示的数量  
-        try:
-            i=data[a]
-            for b in range(len(data)):
-                try:
-                    adata=data[b].split('作者:')[1].split(' BV:')[0]
-                    author.append(adata)
-                except:
-                    pass
-        except:
-            break
-        if i=='\n':
-            break
-        status=i.split('状态:')[1].split('\n')[0]
-        if status=='Normal':
-            line=[sg.Text(i.split('\n')[0],font=('微软雅黑 10'))]
-        else:
-            line=[sg.Text(i.split('\n')[0],font=('微软雅黑 10'),text_color='Red')]
-        sen.append(line)
-    sen.append([sg.Button('使用作者名搜索'),sg.Button('打开txt文件'),sg.Button('退出')])
-    event=sg.Window(title=txt,layout=sen).Read()
+    if len(data) > 21:
+        num = 20
+    else:
+        num = len(data)-1
+    for a in range(num):
+        i=data[a]
+        if i != '\n':
+            adata=i.split('作者:')[1].split(' BV:')[0]
+            author.append(adata)
+            status=i.split('状态:')[1].split('\n')[0]
+            if status=='Normal':
+                line=[sg.Text(i.split('\n')[0],font=('微软雅黑 10'))]
+            else:
+                line=[sg.Text(i.split('\n')[0],font=('微软雅黑 10'),text_color='Red')]
+            sen.append(line)
+    sen.append([sg.Button('使用作者名搜索'),sg.Button('打开txt文件'),sg.Button('查看所有失效视频'),sg.Button('退出')])
+    window = sg.Window(title=txt,layout=sen,font=('微软雅黑 10'))
+    event = window.Read()
     if event[0]=='打开txt文件':
         ml='start data\\'+txt
         os.system(ml)
     elif event[0]=='使用作者名搜索':
         layout=[
-            [sg.Text('输入该视频作者名字',font=('微软雅黑 10'))],
-            [sg.Input(font=('微软雅黑 10'))],
+            [sg.Text('输入该视频作者名字')],
+            [sg.Input()],
             [sg.Button('提交')]
         ]
-        value=sg.Window(title='使用作者名搜索',layout=layout).Read()
+        value=sg.Window(title='使用作者名搜索',layout=layout,font=('微软雅黑 10')).Read()
         time=1
         sen=[]
         while True:
@@ -133,7 +132,28 @@ def dataview(txt):
                 line=[sg.Text(sdata,font=('微软雅黑 10'),text_color='Red')]
             sen.append(line)
         sen.append([sg.Button('确认',font=('微软雅黑 10'))])
-        sg.Window('搜索结果',layout=sen).Read()
+        swindow = sg.Window('搜索结果',layout=sen)
+        swindow.Read()
+        swindow.Close()
+    elif event[0] == '查看所有失效视频':
+        layout = []
+        for i in data:
+            if i != '\n':
+                adata=i.split('作者:')[1].split(' BV:')[0]
+                author.append(adata)
+                status=i.split('状态:')[1].split('\n')[0]
+                if status=='invalid':
+                    line=[sg.Text(i.split('\n')[0],text_color='Red')]
+                    layout.append(line)
+        if layout == []:
+            layout.append([sg.Text('没有发现失效视频!')])
+        layout.append([sg.Push(),sg.Button('返回',font=('微软雅黑 10'))])
+        print(layout)
+        iwindow = sg.Window('已失效视频',layout,font=('微软雅黑 10'))
+        event,value = iwindow.Read()
+        iwindow.Close()
+    window.Close()
+    return None
 
 def update():
     '''
@@ -217,7 +237,7 @@ def GUI() -> None:
                 [sg.Input()],
                 [sg.Button('提交')]
             ]
-            event,value=sg.Window('添加页',layout=layout).read()
+            event,value=sg.Window('添加页',layout=layout,font=('微软雅黑 10')).read()
             if event=='提交':
                 url=value[0]
                 vdeioid,vdeiotit,vdeioauthor,faid,fname=getfavlist(url)
@@ -226,7 +246,7 @@ def GUI() -> None:
                 sg.popup('添加完成，请重新启动程序',font=('微软雅黑 10'))
         elif event=='查看':
             txt=value[0]
-            if txt=='这里还什么都没有啊~' or txt=='':
+            if txt=='这里还什么都没有呢~' or txt=='':
                 sg.popup('请指定一个文件!!!',font=('微软雅黑 10'))
                 exit()
             dataview(txt)
@@ -239,7 +259,7 @@ def GUI() -> None:
                 [sg.Input()],
                 [sg.Button('确认')]
             ]
-            windows = sg.Window('高级选项',layout,font=('微软雅黑'))
+            windows = sg.Window('高级选项',layout,font=('微软雅黑 10'))
             event,value=windows.Read()
             cookie = value[0]
             if event==sg.WIN_CLOSED or cookie==None:
