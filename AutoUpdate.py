@@ -17,9 +17,10 @@ def AutoStart():
         print('添加至启动项失败,请检查程序管理员权限!')
 
 if __name__=='__main__':
-    if sys.argv[1] == 'AutoStart':
-        AutoStart()
-        os._exit(0)
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'AutoStart':
+            AutoStart()
+            os._exit(0)
     while True:
         update()
         sleep(3600)
