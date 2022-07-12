@@ -84,10 +84,10 @@ def dataview(txt):
             data = f.readlines()
     sen=[[sg.Text('本次展示的是一部分数据,若要查看全部数据,请打开txt文件',font=('微软雅黑 10'))]]
     author=[]
-    if len(data) > 21:
+    if len(data) > 20:
         num = 20
     else:
-        num = len(data)-1
+        num = len(data)
     for a in range(num):
         i=data[a]
         if i != '\n':
@@ -179,7 +179,7 @@ def update():
         author=[]
         bvid=[]
         status=[]
-        data_len=len(data)-1
+        data_len=len(data)
         for num in range(data_len):
             tdata=data[num].split('标题:')[1].split(' 作者')[0]
             tit.append(tdata)
